@@ -184,9 +184,10 @@ namespace PerformanceCalculatorGUI.Components
             Skills.BindValueChanged(updateGraphs);
         }
 
-        private void addStrainBars(Skill[] skills, List<float[]> strainLists)
+        private void addStrainBars(Skill[] skills, List<StrainSkill.Strain[]> strainLists)
         {
-            float strainMaxValue = strainLists.Max(list => list.Max());
+            float strainMaxValue = (float)strainLists.Max(list => list.Max()).Value;
+            float totalStrainTime = (float)strainLists[0].Sum(p => p.SectionLength);
 
             for (int i = 0; i < skills.Length; i++)
             {
@@ -201,6 +202,7 @@ namespace PerformanceCalculatorGUI.Components
                         {
                             RelativeSizeAxes = Axes.Both,
                             MaxValue = strainMaxValue,
+                            TotalBarWidth = totalStrainTime,
                             Values = strainLists[i]
                         }
                     }
@@ -214,15 +216,18 @@ namespace PerformanceCalculatorGUI.Components
             });
         }
 
-        private void addTooltipBars(List<float[]> strainLists, int nBars = 1000)
+        private void addTooltipBars(List<StrainSkill.Strain[]> strainLists)
         {
-            double lastStrainTime = strainLists.Max(l => l.Length) * 400;
+            double lastStrainTime = TimeUntilFirstStrain.Value + strainLists[0].Sum(p => p.SectionLength);
 
             var tooltipList = new List<string>();
 
-            for (int i = 0; i < nBars; i++)
+            double time = TimeUntilFirstStrain.Value;
+
+            for (int i = 0; i < strainLists[0].Length; i++)
             {
-                var strainTime = TimeSpan.FromMilliseconds(TimeUntilFirstStrain.Value + lastStrainTime * i / nBars);
+                time += strainLists[0][i].SectionLength;
+                var strainTime = TimeSpan.FromMilliseconds(time);
                 string tooltipText = $"~{strainTime:mm\\:ss\\.ff}";
                 tooltipList.Add(tooltipText);
             }
@@ -242,23 +247,15 @@ namespace PerformanceCalculatorGUI.Components
             });
         }
 
-        private static List<float[]> getStrainLists(Skill[] skills)
+        private static List<StrainSkill.Strain[]> getStrainLists(Skill[] skills)
         {
-            List<float[]> strainLists = new List<float[]>();
+            List<StrainSkill.Strain[]> strainLists = new List<StrainSkill.Strain[]>();
 
             foreach (var skill in skills)
             {
-                double[] strains = ((StrainSkill)skill).GetCurrentStrainPeaks().ToArray();
+                StrainSkill.Strain[] strains = ((StrainSkill)skill).GetCurrentStrainPeaks().ToArray();
 
-                var skillStrainList = new List<float>();
-
-                for (int i = 0; i < strains.Length; i++)
-                {
-                    double strain = strains[i];
-                    skillStrainList.Add(((float)strain));
-                }
-
-                strainLists.Add(skillStrainList.ToArray());
+                strainLists.Add(strains);
             }
 
             return strainLists;
@@ -272,30 +269,34 @@ namespace PerformanceCalculatorGUI.Components
         /// </summary>
         public float? MaxValue { get; set; }
 
+        public float TotalBarWidth { get; set; }
         /// <summary>
         /// A list of floats that defines the length of each <see cref="Bar"/>
         /// </summary>
-        public IEnumerable<float> Values
+        public IEnumerable<StrainSkill.Strain> Values
         {
             set
             {
                 Clear();
 
-                foreach (float val in value)
+                foreach (StrainSkill.Strain strain in value)
                 {
-                    float length = MaxValue ?? value.Max();
+                    float length = MaxValue ?? (float)value.Max().Value;
                     if (length != 0)
-                        length = val / length;
+                        length = (float)strain.Value / length;
 
                     float size = value.Count();
                     if (size != 0)
                         size = 1.0f / size;
+
+                    float width = (float)strain.SectionLength / TotalBarWidth;
 
                     Add(new Bar
                     {
                         RelativeSizeAxes = Axes.Both,
                         Size = new Vector2(size, 1),
                         Length = length,
+                        Width = width,
                         Direction = BarDirection.BottomToTop
                     });
                 }
