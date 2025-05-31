@@ -51,7 +51,7 @@ namespace PerformanceCalculatorGUI.Components
         {
             graphsContainer.Clear();
 
-            var skills = val.NewValue.Where(x => x is StrainSkill or StrainDecaySkill).ToArray();
+            var skills = val.NewValue.Where(x => x is VariableLengthStrainSkill or StrainDecaySkill).ToArray();
 
             // dont bother if there are no strain skills to draw
             if (skills.Length == 0)
@@ -184,7 +184,7 @@ namespace PerformanceCalculatorGUI.Components
             Skills.BindValueChanged(updateGraphs);
         }
 
-        private void addStrainBars(Skill[] skills, List<StrainSkill.Strain[]> strainLists)
+        private void addStrainBars(Skill[] skills, List<VariableLengthStrainSkill.Strain[]> strainLists)
         {
             float strainMaxValue = (float)strainLists.Max(list => list.Max()).Value;
             float totalStrainTime = (float)strainLists[0].Sum(p => p.SectionLength);
@@ -216,7 +216,7 @@ namespace PerformanceCalculatorGUI.Components
             });
         }
 
-        private void addTooltipBars(List<StrainSkill.Strain[]> strainLists)
+        private void addTooltipBars(List<VariableLengthStrainSkill.Strain[]> strainLists)
         {
             double lastStrainTime = TimeUntilFirstStrain.Value + strainLists[0].Sum(p => p.SectionLength);
 
@@ -247,13 +247,13 @@ namespace PerformanceCalculatorGUI.Components
             });
         }
 
-        private static List<StrainSkill.Strain[]> getStrainLists(Skill[] skills)
+        private static List<VariableLengthStrainSkill.Strain[]> getStrainLists(Skill[] skills)
         {
-            List<StrainSkill.Strain[]> strainLists = new List<StrainSkill.Strain[]>();
+            List<VariableLengthStrainSkill.Strain[]> strainLists = new List<VariableLengthStrainSkill.Strain[]>();
 
             foreach (var skill in skills)
             {
-                StrainSkill.Strain[] strains = ((StrainSkill)skill).GetCurrentStrainPeaks().ToArray();
+                VariableLengthStrainSkill.Strain[] strains = ((VariableLengthStrainSkill)skill).GetCurrentStrainPeaks().ToArray();
 
                 strainLists.Add(strains);
             }
@@ -273,13 +273,13 @@ namespace PerformanceCalculatorGUI.Components
         /// <summary>
         /// A list of floats that defines the length of each <see cref="Bar"/>
         /// </summary>
-        public IEnumerable<StrainSkill.Strain> Values
+        public IEnumerable<VariableLengthStrainSkill.Strain> Values
         {
             set
             {
                 Clear();
 
-                foreach (StrainSkill.Strain strain in value)
+                foreach (VariableLengthStrainSkill.Strain strain in value)
                 {
                     float length = MaxValue ?? (float)value.Max().Value;
                     if (length != 0)
