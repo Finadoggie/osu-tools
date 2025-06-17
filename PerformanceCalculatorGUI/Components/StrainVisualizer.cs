@@ -253,7 +253,7 @@ namespace PerformanceCalculatorGUI.Components
 
             foreach (var skill in skills)
             {
-                VariableLengthStrainSkill.StrainPeak[] strains = ((VariableLengthStrainSkill)skill).GetDebugCurrentStrainPeaks().ToArray();
+                VariableLengthStrainSkill.StrainPeak[] strains = ((VariableLengthStrainSkill)skill).GetCurrentStrainPeaks().ToArray();
 
                 strainLists.Add(strains);
             }
