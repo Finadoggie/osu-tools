@@ -146,6 +146,10 @@ namespace PerformanceCalculatorGUI.Screens.ObjectInspection
 
             if (hitObject.Angle is not null)
                 flowContainer.Add(new ObjectInspectorDifficultyValue("Angle", double.RadiansToDegrees(hitObject.Angle.Value)));
+            if (hitObject.SliderAngle1 is not null)
+                flowContainer.Add(new ObjectInspectorDifficultyValue("Slider Angle 1", double.RadiansToDegrees(hitObject.SliderAngle1.Value)));
+            if (hitObject.SliderAngle2 is not null)
+                flowContainer.Add(new ObjectInspectorDifficultyValue("Slider Angle 2", double.RadiansToDegrees(hitObject.SliderAngle2.Value)));
 
             if (hitObject.BaseObject is Slider)
             {
