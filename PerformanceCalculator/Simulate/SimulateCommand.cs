@@ -91,6 +91,6 @@ namespace PerformanceCalculator.Simulate
 
         protected abstract Dictionary<HitResult, int> GenerateHitResults(IBeatmap beatmap, Mod[] mods);
 
-        protected virtual double GetAccuracy(IBeatmap beatmap, Dictionary<HitResult, int> statistics, Mod[] mods) => 0;
+        public virtual double GetAccuracy(IBeatmap beatmap, Dictionary<HitResult, int> statistics, Mod[] mods) => 0;
     }
 }

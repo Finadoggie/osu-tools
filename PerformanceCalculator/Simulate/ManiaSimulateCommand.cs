@@ -103,7 +103,7 @@ namespace PerformanceCalculator.Simulate
             };
         }
 
-        protected override double GetAccuracy(IBeatmap beatmap, Dictionary<HitResult, int> statistics, Mod[] mods)
+        public override double GetAccuracy(IBeatmap beatmap, Dictionary<HitResult, int> statistics, Mod[] mods)
         {
             int countPerfect = statistics[HitResult.Perfect];
             int countGreat = statistics[HitResult.Great];

@@ -50,15 +50,15 @@ namespace PerformanceCalculator.Simulate
             // Use lazer info only if score has sliderhead accuracy
             if (mods.OfType<OsuModClassic>().Any(m => m.NoSliderHeadAccuracy.Value))
             {
-                return generateHitResults(beatmap, Accuracy / 100, Misses, Mehs, Goods, null, null);
+                return GenerateHitResults(beatmap, Accuracy / 100, Misses, Mehs, Goods, null, null);
             }
             else
             {
-                return generateHitResults(beatmap, Accuracy / 100, Misses, Mehs, Goods, largeTickMisses, sliderTailMisses);
+                return GenerateHitResults(beatmap, Accuracy / 100, Misses, Mehs, Goods, largeTickMisses, sliderTailMisses);
             }
         }
 
-        private static Dictionary<HitResult, int> generateHitResults(IBeatmap beatmap, double accuracy, int countMiss, int? countMeh, int? countGood, int? countLargeTickMisses, int? countSliderTailMisses)
+        public static Dictionary<HitResult, int> GenerateHitResults(IBeatmap beatmap, double accuracy, int countMiss, int? countMeh, int? countGood, int? countLargeTickMisses, int? countSliderTailMisses)
         {
             int countGreat;
 
@@ -151,7 +151,7 @@ namespace PerformanceCalculator.Simulate
             return result;
         }
 
-        protected override double GetAccuracy(IBeatmap beatmap, Dictionary<HitResult, int> statistics, Mod[] mods)
+        public override double GetAccuracy(IBeatmap beatmap, Dictionary<HitResult, int> statistics, Mod[] mods)
         {
             int countGreat = statistics[HitResult.Great];
             int countGood = statistics[HitResult.Ok];
