@@ -29,7 +29,7 @@ namespace PerformanceCalculator.OwcStats
 
         [UsedImplicitly]
         [Required]
-        [Argument(1, Name = "output filename", Description = "name of .csv file containing pp values for each score")]
+        [Argument(1, Name = "output filename", Description = "name of .tsv file containing pp values for each score")]
         public string OutputFilename { get; }
 
         public override void Execute()
@@ -49,9 +49,16 @@ namespace PerformanceCalculator.OwcStats
 
             // Output to new csv
             using (var writer = new StreamWriter(OutputFilename))
-            using (var csv = new CsvWriter(writer, CultureInfo.InvariantCulture))
             {
-                csv.WriteRecords(outputEntries);
+                writer.WriteLine("ScoreId\tPP");
+
+                foreach (var entry in outputEntries)
+                {
+                    writer.Write(entry.ScoreId);
+                    writer.Write("\t");
+                    writer.Write(entry.PP);
+                    writer.Write("\n");
+                }
             }
         }
 
