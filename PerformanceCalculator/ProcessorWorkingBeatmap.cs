@@ -4,6 +4,7 @@
 using System;
 using System.IO;
 using osu.Framework.Audio.Track;
+using osu.Framework.Extensions;
 using osu.Framework.Graphics.Textures;
 using osu.Framework.IO.Network;
 using osu.Game.Beatmaps;
@@ -50,12 +51,16 @@ namespace PerformanceCalculator
 
         public static ProcessorWorkingBeatmap FromFileOrId(string fileOrId)
         {
+            ProcessorWorkingBeatmap beatmap;
+
             if (fileOrId.EndsWith(".osu", StringComparison.Ordinal))
             {
                 if (!File.Exists(fileOrId))
                     throw new ArgumentException($"Beatmap file {fileOrId} does not exist.");
 
-                return new ProcessorWorkingBeatmap(fileOrId);
+                beatmap = new ProcessorWorkingBeatmap(fileOrId);
+                beatmap.BeatmapInfo.MD5Hash = File.ReadAllText(fileOrId).ComputeMD5Hash();
+                return beatmap;
             }
 
             if (!int.TryParse(fileOrId, out int beatmapId))
@@ -69,7 +74,9 @@ namespace PerformanceCalculator
                 new FileWebRequest(cachePath, $"{Program.ENDPOINT_CONFIGURATION.WebsiteUrl}/osu/{beatmapId}").Perform();
             }
 
-            return new ProcessorWorkingBeatmap(cachePath, beatmapId);
+            beatmap = new ProcessorWorkingBeatmap(cachePath, beatmapId);
+            beatmap.BeatmapInfo.MD5Hash = File.ReadAllText(cachePath).ComputeMD5Hash();
+            return beatmap;
         }
 
         protected override IBeatmap GetBeatmap() => beatmap;

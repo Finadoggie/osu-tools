@@ -8,6 +8,7 @@ using osu.Framework.Logging;
 using osu.Game.Beatmaps.Formats;
 using osu.Game.Online;
 using PerformanceCalculator.Difficulty;
+using PerformanceCalculator.GenerateReplay;
 using PerformanceCalculator.Leaderboard;
 using PerformanceCalculator.Performance;
 using PerformanceCalculator.Profile;
@@ -22,6 +23,7 @@ namespace PerformanceCalculator
     [Subcommand(typeof(ProfileCommand))]
     [Subcommand(typeof(SimulateListingCommand))]
     [Subcommand(typeof(LeaderboardCommand))]
+    [Subcommand(typeof(GenerateReplayCommand))]
     [Subcommand(typeof(LegacyScoreAttributesCommand))]
     [Subcommand(typeof(LegacyScoreConversionCommand))]
     [HelpOption("-?|-h|--help")]

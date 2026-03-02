@@ -21,7 +21,6 @@ using osu.Game.Rulesets.Mods;
 using osu.Game.Rulesets.Osu.Difficulty.Evaluators;
 using osu.Game.Rulesets.Osu.Difficulty.Preprocessing;
 using osu.Game.Rulesets.Osu.Objects;
-using osu.Game.Rulesets.Scoring;
 using osu.Game.Rulesets.Taiko.Difficulty.Evaluators;
 using osu.Game.Rulesets.Taiko.Difficulty.Preprocessing;
 using osu.Game.Rulesets.Taiko.Objects;
@@ -176,7 +175,6 @@ namespace PerformanceCalculatorGUI.Screens.ObjectInspection
                     new ObjectInspectorDifficultyValue($"{i}. Distance", movement.Distance),
                     new ObjectInspectorDifficultyValue($"{i}. Time", movement.Time),
                     new ObjectInspectorDifficultyValue($"{i}. Radius", Math.Max(movement.StartRadius, movement.EndRadius)),
-                    new ObjectInspectorDifficultyValue($"{i}. Difficulty", AimEvaluator.EvaluateDifficultyOfMovement(hitObject, movement))
                 });
 
                 if (movement.PreviousMovement != null)
