@@ -175,6 +175,8 @@ namespace PerformanceCalculatorGUI.Screens.ObjectInspection
                     new ObjectInspectorDifficultyValue($"{i}. Distance", movement.Distance),
                     new ObjectInspectorDifficultyValue($"{i}. Time", movement.Time),
                     new ObjectInspectorDifficultyValue($"{i}. Radius", Math.Max(movement.StartRadius, movement.EndRadius)),
+                    new ObjectInspectorDifficultyValue($"{i}. AimDifficulty", movement.AimDifficulty),
+                    new ObjectInspectorDifficultyValue($"{i}. AimStrain", movement.AimStrain),
                 });
 
                 if (movement.PreviousMovement != null)

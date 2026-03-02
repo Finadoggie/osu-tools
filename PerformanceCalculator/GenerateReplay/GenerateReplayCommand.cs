@@ -37,16 +37,18 @@ namespace PerformanceCalculator.GenerateReplay
             // Get the ruleset
             var ruleset = LegacyHelper.GetRulesetFromLegacyID(0);
             OsuDifficultyCalculator calculator = (OsuDifficultyCalculator)ruleset.CreateDifficultyCalculator(beatmap);
-            calculator.Calculate();
+            var osuAttributes = (OsuDifficultyAttributes)calculator.Calculate();
 
             var forces = calculator.GetForces(1.0);
 
-            const string user = "Finadoggie";
+            const string user = "Finabottie";
             DateTime date = DateTime.UtcNow;
 
             List<ReplayCompressor.ReplayFrame> frames = new List<ReplayCompressor.ReplayFrame>();
 
             long prevLongTime = 0;
+
+            Dictionary<string, int> forceTypes = new Dictionary<string, int>();
 
             foreach (var force in forces)
             {
@@ -59,7 +61,7 @@ namespace PerformanceCalculator.GenerateReplay
                     Vector2 pos = force.StartPosition;
 
                     float displacementTime = i;
-                    Vector2 displacement = CalculateDisplacement((float)force.StartVelocity / force.PrevForce?.ScalingFactor ?? force.ScalingFactor, (float)force.StartVelocityAngle, (float)force.Acceleration / force.ScalingFactor, (float)force.AbsoluteAngle, displacementTime);
+                    Vector2 displacement = CalculateDisplacement((float)force.StartVelocity, (float)force.StartVelocityAngle, (float)force.Acceleration, (float)force.AbsoluteAngle, displacementTime);
 
                     pos += displacement;
 
@@ -94,6 +96,9 @@ namespace PerformanceCalculator.GenerateReplay
                     y = Math.Max(y_min, Math.Min(y_max, force.EndPosition.Y)),
                     clicks = 5
                 });
+
+                forceTypes.TryAdd(force.AimType, 0);
+                forceTypes[force.AimType]++;
             }
 
             // Required as final dummy frame
@@ -126,6 +131,13 @@ namespace PerformanceCalculator.GenerateReplay
             };
 
             OsrGenerator.WriteReplayHeader(Filename, myReplay);
+
+            // Print Diagnostic info
+            Console.WriteLine(beatmap.BeatmapInfo);
+            Console.WriteLine($"Aim Difficulty: {osuAttributes.AimDifficulty}");
+
+            foreach (var (key, value) in forceTypes)
+                Console.WriteLine($"{key}: {value}");
         }
 
         public static Vector2 CalculateDisplacement(
