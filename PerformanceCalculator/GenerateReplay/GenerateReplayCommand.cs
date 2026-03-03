@@ -3,6 +3,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using JetBrains.Annotations;
 using McMaster.Extensions.CommandLineUtils;
 using Newtonsoft.Json;
@@ -100,6 +101,14 @@ namespace PerformanceCalculator.GenerateReplay
                 forceTypes.TryAdd(force.AimType, 0);
                 forceTypes[force.AimType]++;
             }
+
+            frames.Add(new ReplayCompressor.ReplayFrame
+            {
+                deltaTime = 100000,
+                x = frames.Last().x,
+                y = frames.Last().y,
+                clicks = 5
+            });
 
             // Required as final dummy frame
             frames.Add(new ReplayCompressor.ReplayFrame { deltaTime = -12345, x = 0, y = 0, clicks = 0 });
