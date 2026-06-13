@@ -7,6 +7,7 @@ using McMaster.Extensions.CommandLineUtils;
 using osu.Framework.Logging;
 using osu.Game.Beatmaps.Formats;
 using osu.Game.Online;
+using PerformanceCalculator.CwcStats;
 using PerformanceCalculator.Difficulty;
 using PerformanceCalculator.Leaderboard;
 using PerformanceCalculator.OwcStats;
@@ -26,6 +27,7 @@ namespace PerformanceCalculator
     [Subcommand(typeof(LegacyScoreAttributesCommand))]
     [Subcommand(typeof(LegacyScoreConversionCommand))]
     [Subcommand(typeof(OwcStatsCommand))]
+    [Subcommand(typeof(CwcStatsCommand))]
     [HelpOption("-?|-h|--help")]
     public class Program
     {

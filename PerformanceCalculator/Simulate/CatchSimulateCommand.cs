@@ -36,9 +36,9 @@ namespace PerformanceCalculator.Simulate
 
         public override Ruleset Ruleset => new CatchRuleset();
 
-        protected override Dictionary<HitResult, int> GenerateHitResults(IBeatmap beatmap, Mod[] mods) => generateHitResults(beatmap, Accuracy / 100, Misses, Mehs, Goods);
+        protected override Dictionary<HitResult, int> GenerateHitResults(IBeatmap beatmap, Mod[] mods) => GenerateHitResults(beatmap, Accuracy / 100, Misses, Mehs, Goods);
 
-        private static Dictionary<HitResult, int> generateHitResults(IBeatmap beatmap, double accuracy, int countMiss, int? countMeh, int? countGood)
+        public static Dictionary<HitResult, int> GenerateHitResults(IBeatmap beatmap, double accuracy, int countMiss, int? countMeh, int? countGood)
         {
             int maxCombo = beatmap.GetMaxCombo();
             int maxTinyDroplets = beatmap.HitObjects.OfType<JuiceStream>().Sum(s => s.NestedHitObjects.OfType<TinyDroplet>().Count());
