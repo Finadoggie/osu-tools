@@ -120,6 +120,7 @@ namespace PerformanceCalculator.CwcStats
 
             // mods.Add("NF");
             mods.Add("CL");
+            mods.Add("NF");
             mods.Add("SV2");
 
             if (modsString == "NM") return mods.ToArray();
